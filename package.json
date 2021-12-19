@@ -1,0 +1,8 @@
+{
+  "name": "el",
+  "version": "0.0.0",
+  "main": "el.js",
+  "repository": "https://github.com/carlosvpi/el.git",
+  "author": "CarlosVazPI <carlos.vazpi@gmail.com>",
+  "license": "MIT"
+}
