@@ -11,6 +11,70 @@ _El_ takes a tagname and generates a DOM node with that tag name, wrapped into a
 
 _El_ takes a DOM node and wraps it into an El object `el`.
 
+### el.tap
+
+#### el.tap(f: function)
+
+Calls `f(el)`. Returns `el`.
+
+### el.on
+
+#### el.on('beforeMount', f: function)
+
+Calls `f(el)` just before the node wrapped by `el` is mounted. Returns `el`.
+
+#### el.on('afterMount', f: function)
+
+Calls `f(el)` just after the node wrapped by `el` is mounted. Returns `el`.
+
+#### el.on('mount', f: function)
+
+Calls `f(p: function)` when `el` is set as child of another element. In this case, `p()` returns a promise that is fulfilled when the insertion of `el` as a child of another element is resolved. If by the time `p` is called, `el` is no longer expected to be a child of another element, the `resolve` function of the promise is called with `false`. It is called with `true` otherwise.
+
+Example:
+
+```javascript
+El('span').on('mount', async mount => {
+  /* Do something */
+  const isSuccessful = await mount()
+  if (isSuccessful) {
+    console.log('Mounting was successful')
+  } else {
+    console.log('Mounting was unsuccessful, the element was unmounted before calling "mount()"')
+  }
+})
+```
+
+An unsuccessful mount may happen if the mounting is delayed (e.g. via a setTimeout) and, before the timeout ends, the element is unmounted again (e.g., as a response to a user input).
+
+#### el.on('beforeUnmount', f: function)
+
+Calls `f(el)` just before the node wrapped by `el` is unmounted. Returns `el`.
+
+#### el.on('afterUnmount', f: function)
+
+Calls `f(el)` just after the node wrapped by `el` is unmounted. Returns `el`.
+
+#### el.on('unmount', f: function)
+
+Calls `f(p: function)` when `el` is unset as child of another element. In this case, `p()` returns a promise that is fulfilled when the removal of `el` as a child of another element is resolved. If by the time `p` is called, `el` is still expected to be a child of its parent element, the `resolve` function of the promise is called with `false`. It is called with `true` otherwise.
+
+Example:
+
+```javascript
+El('span').on('unmount', async unmount => {
+  /* Do something */
+  const isSuccessful = await unmount()
+  if (isSuccessful) {
+    console.log('Unmounting was successful')
+  } else {
+    console.log('Unmounting was unsuccessful, the element was mounted back before calling "unmount()"')
+  }
+})
+```
+
+An unsuccessful unmount may happen if the unmounting is delayed (e.g. via a setTimeout) and, before the timeout ends, the element is mounted again (e.g., as a response to a user input).
+
 ### el.attr
 
 #### el.attr(attrName: string)
