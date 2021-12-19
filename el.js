@@ -3,7 +3,7 @@ const id = x => x
 const apply = f => f()
 const getRandomId = () => Math.random().toString(16).slice(2)
 
-class _El {
+class El {
   constructor(node) {
     this.node = node
     this.DomEventHandlers = {
@@ -14,7 +14,7 @@ class _El {
       afterMount: noop,
       afterUnmount: noop
     }
-    this._children = [...(node.children ?? [])].map(childNode => new _El(childNode, this))
+    this._children = [...(node.children ?? [])].map(childNode => new El(childNode, this))
   }
   tap(f) {
     f(this)
@@ -219,13 +219,13 @@ class _El {
   }
 }
 
-Text = content => new _El(document.createTextNode(content))
-El = (...args) => {
-	return new _El(typeof args[0] === 'string' ? document.createElement(...args) : args[0])
+Text = content => new El(document.createTextNode(content))
+el = (...args) => {
+	return new El(typeof args[0] === 'string' ? document.createElement(...args) : args[0])
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = El
+  module.exports = el
   module.exports.Text = Text
   module.exports.getRandomId = getRandomId
 }
