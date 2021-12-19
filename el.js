@@ -14,7 +14,9 @@ class El {
       afterMount: noop,
       afterUnmount: noop
     }
-    this._children = [...node.children].map(childNode => new El(childNode))
+    this._children = node instanceof Text
+      ? []
+      : [...node.children].map(childNode => new El(childNode))
   }
   tap(f) {
     f(this)
@@ -219,13 +221,13 @@ class El {
   }
 }
 
-Text = content => new El(document.createTextNode(content))
+text = content => new El(document.createTextNode(content))
 el = (...args) => {
 	return new El(typeof args[0] === 'string' ? document.createElement(...args) : args[0])
 }
 
 if (typeof module !== 'undefined') {
   module.exports = el
-  module.exports.Text = Text
+  module.exports.text = text
   module.exports.getRandomId = getRandomId
 }
