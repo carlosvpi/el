@@ -14,7 +14,7 @@ class El {
       afterMount: noop,
       afterUnmount: noop
     }
-    this._children = [...(node.children ?? [])].map(childNode => new El(childNode, this))
+    this._children = [...node.children].map(childNode => new El(childNode))
   }
   tap(f) {
     f(this)
@@ -127,7 +127,7 @@ class El {
     	if (currentIndex >= 0) {
 	    	const el = this._children[currentIndex]
 	    	this._children[currentIndex] = undefined
-	    	el?.unmount(this)
+	    	el && el.unmount(this)
 	    }
       return this
     }
@@ -138,7 +138,7 @@ class El {
     	if (this._children[index] !== undefined) {
 	    	const el = this._children[index]
 	    	this._children[index] = undefined
-	    	el?.unmount(this)
+	    	el && el.unmount(this)
     	}
     	return this
     }
@@ -149,7 +149,7 @@ class El {
       }
 	    const el = this._children[index]
 	    this._children[index] = child
-	    el?.unmount(this)
+	    el && el.unmount(this)
 	    if (oldIndex === -1) {
 		    child.mount(this)
 		  }
